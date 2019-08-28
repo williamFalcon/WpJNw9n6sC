@@ -62,7 +62,7 @@ class CPCSelfSupervised(pl.LightningModule):
     # ------------------------------
     def forward(self, img):
         # put all patches on the batch dim for simultaneous processing
-        b, p, c, w, h = img_1.size()
+        b, p, c, w, h = img.size()
         img = img.view(-1, c, w, h)
 
         # Z are the latent vars

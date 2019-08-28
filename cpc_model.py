@@ -60,22 +60,22 @@ class CPCSelfSupervised(pl.LightningModule):
     # ------------------------------
     # FWD
     # ------------------------------
-    def forward(self, img_1):
+    def forward(self, img):
         # put all patches on the batch dim for simultaneous processing
         b, p, c, w, h = img_1.size()
-        img_1 = img_1.view(-1, c, w, h)
+        img = img.view(-1, c, w, h)
 
         # Z are the latent vars
-        Z = self.encoder(img_1)
+        Z = self.encoder(img)
         Z = self.__recover_z_shape(Z, b)
 
         return Z
 
     def training_step(self, batch, batch_nb):
-        img_1, _ = batch
+        img, _ = batch
 
         # Latent features
-        Z = self.forward(img_1.half())
+        Z = self.forward(img.half())
         Z = Z.half()
 
         # generate the context vars
@@ -100,14 +100,14 @@ class CPCSelfSupervised(pl.LightningModule):
         return result
 
     def validation_step(self, batch, batch_nb):
-        img_1, labels = batch
+        img, labels = batch
 
         if self.trainer.use_amp:
-            img_1 = img_1.half()
+            img = img.half()
 
         # generate features
         # Latent features
-        Z = self.forward(img_1)
+        Z = self.forward(img)
         Z = Z.half()
 
         # generate the context vars

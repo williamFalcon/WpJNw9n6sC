@@ -38,8 +38,8 @@ class CPCTransformsC10:
 
     def __call__(self, inp):
         inp = self.flip_lr(inp)
-        out1 = self.train_transform(inp)
-        return out1
+        out = self.train_transform(inp)
+        return out
 
 
 class RandomTranslateWithReflect:
